@@ -1,0 +1,40 @@
+html,body {
+	margin: 0px;
+	height: 100%;
+	cursor: default;
+	font: 100% "Trebuchet MS",sans-serif;
+}
+
+#center {
+	height: 100%;
+}
+
+#map {
+	height: auto;
+	width: 100%;
+	position: absolute;
+	top: 0px;
+	bottom: 0px;
+}
+
+#layers_container {
+	font-size: 10px;
+	left: 10px;
+	position: absolute;
+	top: 75px;
+	width: 250px;
+	z-index: 1100;
+}
+
+#time_slider_pane {
+	z-index: 2000;
+	position: absolute;
+	top: 8px;
+	left: 220px;
+	width: 180px;
+	font-size: 11px;
+	border: 1px solid #333;
+	height: 30px;
+	background-color: #456;
+	color: #FFF;
+}
