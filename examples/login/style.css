@@ -1,0 +1,27 @@
+.validateTips {
+	color: green;
+}
+
+.ui-dialog {
+	font-family: 'PT Sans', Helvetica, Arial, sans-serif;
+	font-size: 18px;
+	background-color: #FAFAFA;
+}
+
+.ui-dialog-content.ui-widget-content {
+	overflow: hidden;
+}
+
+.ui-dialog-titlebar-close {
+	display: none;
+}
+
+.ui-front {
+	z-index: 2001;
+}
+
+.ui-widget-overlay {
+	background-color: #BDBDBD;
+	opacity: 0.8;
+	z-index: 2000;
+}
