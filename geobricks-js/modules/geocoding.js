@@ -1,4 +1,4 @@
-define([ "jquery", "message-bus", "geocoding-engine-google", "module", "require", "css-loader", "alerts-bootstrap", "jquery-ui", "spin", "jquery.spin" ], function($, bus, geocoding, module, require) {
+define([ "jquery", "message-bus", "geocoding-engine", "module", "require", "css-loader", "alerts", "jquery-ui", "spin", "jquery.spin" ], function($, bus, geocoding, module, require) {
 	var config = module.config();
 
 	// I18N

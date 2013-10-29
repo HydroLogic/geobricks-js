@@ -9,6 +9,12 @@ require.config({
 		"spin" : "../lib/spin.min",
 		"jquery.spin" : "../lib/jquery.spin",
 	},
+	map : {
+		'*' : {
+			"geocoding-engine" : "geocoding-engine-google",
+			"alerts" : "alerts-bootstrap"
+		}
+	},
 	shim : {
 		"bootstrap" : {
 			deps : [ "jquery" ],
