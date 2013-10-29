@@ -1,0 +1,58 @@
+.geocoding-container {
+	font: 12px "Trebuchet MS", sans-serif;
+	left: 50px;
+	top: 15px;
+	position: relative;
+	width: 250px;
+	height: 0px;
+	z-index: 1100;
+	float: left;
+	z-index: 1100;
+}
+
+.geocoding-searching {
+	width: 0px;
+	height: 0px;
+	left: -15px;
+	top: 15px;
+	position: relative;
+	float: left;
+}
+
+.geocoding-input-div {
+	height: 30px;
+}
+
+.geocoding-more {
+	background: url(images/more.png) no-repeat center;
+	width: 20px;
+	height: 100%;
+	float: left;
+	position: relative;
+	margin-left: 5px;
+	z-index: 1100;
+}
+
+.geocoding-input {
+	background: rgba(255, 255, 255, 0.5);
+	float: left;
+	padding: 5px;
+	height: 100%;
+	border-radius: 5px;
+}
+
+.geocoding-results .geocoding-result-list {
+	background: rgba(255, 255, 255, 0.5);
+	padding: 0px;
+	border: 1px solid;
+	border-radius: 5px;
+	width: 200%;
+	height: 100px;
+	overflow-y: scroll;
+}
+
+.geocoding-result {
+	list-style: none;
+	padding: 10px;
+	margin: 10px;
+}

@@ -1,0 +1,16 @@
+html,body {
+	margin: 0px;
+	height: 100%;
+}
+
+#center {
+	height: 100%;
+}
+
+#map {
+	height: auto;
+	width: 100%;
+	position: relative;
+	top: 0px;
+	bottom: 0px;
+}
