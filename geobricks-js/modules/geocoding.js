@@ -1,14 +1,8 @@
-define([ "jquery", "message-bus", "geocoding-engine", "i18n", "module", "require", "css-loader", "alerts", "jquery-ui", "spin", "jquery.spin" ], function($, bus, geocoding, i18n, module, require) {
+define([ "jquery", "message-bus", "geocoding-engine", "i18n", "css-loader", "module", "require", "alerts", "jquery-ui", "spin", "jquery.spin" ], function($, bus, geocoding, i18n, cssLoader, module, require) {
 	var config = module.config();
 
-	// CSS
-	var css = config.css;
-	if (!css) {
-		css = [ require.toUrl("../styles/geocoding.css") ];
-	}
-	for (var i = 0; i < css.length; i++) {
-		bus.send("css-load", css[i]);
-	}
+	var defaultCss = [ "../styles/geocoding.css" ];
+	cssLoader.initModule(config.css, defaultCss.map(require.toUrl));
 
 	// Spin options
 	var spinOpts = config.spinOpts;
