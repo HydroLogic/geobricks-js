@@ -17,7 +17,16 @@ define([ "message-bus" ], function(bus) {
 		link.type = "text/css";
 		link.rel = "stylesheet";
 		link.href = cssURL;
-		document.getElementsByTagName("head")[0].appendChild(link);
+
+		// Insert first so it does not override the CSS specified in the html
+		// document
+		var head = document.getElementsByTagName("head")[0];
+		var first = head.firstChild;
+		if (first) {
+			head.insertBefore(link, first);
+		} else {
+			head.appendChild(link);
+		}
 	}
 
 	bus.listen("css-load", function(event, cssURL) {

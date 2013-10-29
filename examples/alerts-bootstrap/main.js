@@ -19,16 +19,16 @@ require([ "jquery", "message-bus", "alerts-bootstrap" ], function($, bus) {
 		var button = $("<button>Click me for " + type + "</button>");
 		body.append(button);
 		button.click(function() {
-			bus.send("alert", [  "This is a " + type + " message", type ]);
+			bus.send("alert", [ "This is a " + type + " message", type ]);
 		});
 	}
-	
+
 	addButton("success");
 	addButton("info");
 	addButton("warning");
 	addButton("danger");
 
-	var div = $("<div/>").attr("id", "errors");
+	var div = $("<div/>").attr("id", "alert-container");
 	body.append(div);
 	bus.send("init-alerts", [ div ]);
 });

@@ -6,17 +6,29 @@
  *      
  *      var div = $("<div/>");
  *      $("body").append(div);
- *      Send example: bus.send("init-alerts", [ div ]); 
+ *      bus.send("init-alerts", [ div ]); 
  * 
  *   - alert
  * 			Shows a Bootstrap alert with the given message.
  * 		@param message - string
  *      @param severity - string, one of 'success', 'info', 'warning' or 'danger'
  * 		
- * 		Send example: bus.send("error", "Unexpected error!", "danger"); 
+ * 		bus.send("alert", [ "Unexpected error!", "danger" ]); 
  */
-define([ "jquery", "message-bus", "module", "bootstrap" ], function($, bus, module) {
+define([ "jquery", "message-bus", "css-loader", "module", "require", "bootstrap" ], function($, bus, cssLoader, module, require) {
 	var config = module.config();
+
+	var defaultCss = [ "../styles/bootstrap-3.0.0.min.css" ];
+	cssLoader.initModule(config.css, defaultCss.map(require.toUrl));
+
+	var severities = [ "success", "info", "warning", "danger" ];
+	var prefixes = {
+		success : config.successPrefix ? config.successPrefix : "",
+		info : config.infoPrefix ? config.infoPrefix : "",
+		warning : config.warningPrefix ? config.warningPrefix : "",
+		danger : config.dangerPrefix ? config.dangerPrefix : ""
+	};
+
 	var divContainer = null;
 
 	bus.listen("init-alerts", function(event, div) {
@@ -24,34 +36,13 @@ define([ "jquery", "message-bus", "module", "bootstrap" ], function($, bus, modu
 	});
 
 	bus.listen("alert", function(event, msg, severity) {
-		var div = $("<div/>");
-		div.addClass("alert alert-dismissable");
-
-		var prefix = "";
-		if (severity == "success") {
-			div.addClass("alert-success");
-			if (config.successPrefix) {
-				prefix = config.successPrefix;
-			}
-		} else if (severity == "info") {
-			div.addClass("alert-info");
-			if (config.infoPrefix) {
-				prefix = config.infoPrefix;
-			}
-		} else if (severity == "warning") {
-			div.addClass("alert-warning");
-			if (config.warningPrefix) {
-				prefix = config.warningPrefix;
-			}
-		} else {
-			div.addClass("alert-danger");
-			if (config.dangerPrefix) {
-				prefix = config.dangerPrefix;
-			}
+		if ($.inArray(severity, severities) == -1) {
+			severity = severities[severities.length - 1];
 		}
 
 		var button = $('<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>');
-		var text = $("<div><strong>" + prefix + "</strong> " + msg + "</div>");
+		var text = $("<div><strong>" + prefixes[severity] + "</strong> " + msg + "</div>");
+		var div = $("<div/>").addClass("alert alert-dismissable alert-" + severity);
 		div.append(button);
 		div.append(text);
 		divContainer.append(div);
