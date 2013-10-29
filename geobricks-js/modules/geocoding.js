@@ -1,13 +1,5 @@
-define([ "jquery", "message-bus", "geocoding-engine", "module", "require", "css-loader", "alerts", "jquery-ui", "spin", "jquery.spin" ], function($, bus, geocoding, module, require) {
+define([ "jquery", "message-bus", "geocoding-engine", "i18n", "module", "require", "css-loader", "alerts", "jquery-ui", "spin", "jquery.spin" ], function($, bus, geocoding, i18n, module, require) {
 	var config = module.config();
-
-	// I18N
-	var i18n = config.i18n;
-	if (!i18n) {
-		i18n = function(string) {
-			return string;
-		};
-	}
 
 	// CSS
 	var css = config.css;

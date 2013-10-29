@@ -1,12 +1,4 @@
-define([ "jquery", "message-bus", "module", "css-loader" ], function($, bus, module) {
-	// Configure i18n
-	var i18n = module.config().i18n;
-	if (!i18n) {
-		i18n = function(string) {
-			return string;
-		};
-	}
-
+define([ "jquery", "message-bus", "i18n", "module", "css-loader" ], function($, bus, i18n, module) {
 	// Configure style
 	var css = module.config().css;
 	if (css) {
