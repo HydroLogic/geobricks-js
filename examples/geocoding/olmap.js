@@ -32,7 +32,7 @@ define([ "openlayers", "jquery", "message-bus" ], function(ol, $, bus) {
 		}
 	});
 
-	bus.listen("map-extent", function(event, id, result) {
+	bus.listen("center-map", function(event, result) {
 		var bounds = new OpenLayers.Bounds(result.left, result.bottom, result.right, result.top);
 		map.zoomToExtent(bounds.transform(new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject()));
 	});

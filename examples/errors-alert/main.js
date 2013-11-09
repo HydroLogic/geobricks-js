@@ -9,6 +9,6 @@ require([ "jquery", "message-bus", "errors-alert" ], function($, bus) {
 	var button = $("<button>Click me for an error!</button>");
 	$("body").append(button);
 	button.click(function() {
-		bus.send("error", "An 'unexpected' error has occurred");
+		bus.send("alert", [ "An 'unexpected' error has occurred", "danger" ]);
 	});
 });

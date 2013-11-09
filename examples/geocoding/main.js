@@ -28,7 +28,7 @@ require([ "jquery", "message-bus", "geocoding", "alerts-bootstrap", "olmap" ], f
 	var center = $("<div/>").attr("id", "center");
 
 	var geocodingDiv = $("<div/>");
-	geocoding("id", geocodingDiv);
+	geocoding.init("id", geocodingDiv);
 	center.append(geocodingDiv);
 
 	var divAlerts = $("<div/>");
