@@ -7,6 +7,7 @@ Contents:
    :maxdepth: 2
 
    overview
+   overview-js
    patterns/index
 
 Indices and tables
