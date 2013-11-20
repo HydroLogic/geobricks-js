@@ -5,16 +5,15 @@
 	position: relative;
 	width: 250px;
 	height: 0px;
-	z-index: 1100;
+	z-index: 10;
 	float: left;
-	z-index: 1100;
 }
 
 .geocoding-searching {
 	width: 0px;
 	height: 0px;
-	left: -15px;
-	top: 15px;
+	left: -20px;
+	top: 20px;
 	position: relative;
 	float: left;
 }
@@ -23,36 +22,84 @@
 	height: 30px;
 }
 
-.geocoding-more {
-	background: url(images/more.png) no-repeat center;
-	width: 20px;
-	height: 100%;
+input[type="text"].geocoding-input {
+	background: rgba(255, 255, 255, 1);
 	float: left;
-	position: relative;
-	margin-left: 5px;
-	z-index: 1100;
+	padding-left: 10px;
+	padding-right: 40px;
+	width: 100%;
+	border-radius: 5px;
+	height: 100%;
 }
 
-.geocoding-input {
-	background: rgba(255, 255, 255, 0.5);
-	float: left;
-	padding: 5px;
-	height: 100%;
-	border-radius: 5px;
+.geocoding-input-icon {
+	background: url(images/search.png);
+	background-size: 100% auto;
+	width: 32px;
+	height: 32px;
+	position: absolute;
+	right: -45px;
+	top: 4px;
+	cursor: pointer;
 }
 
-.geocoding-results .geocoding-result-list {
-	background: rgba(255, 255, 255, 0.5);
-	padding: 0px;
-	border: 1px solid;
-	border-radius: 5px;
-	width: 200%;
-	height: 100px;
+.geocoding-results {
+	width: 450px;
+	height: 200px;
+	position: absolute;
+	border: 1px solid black;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	top: 150px;
+	left: 20px;
+}
+
+.geocoding-results-title {
+	background: #009ED6;
+	height: 39px;
+	line-height: 40px;
+	width: 100%;
+	text-align: center;
+	font-size: 18px;
+	font-weight: bold;
+	border-bottom: 1px solid black;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	position: absolute;
+	cursor: move;
+}
+
+.geocoding-results-close {
+	background: url(images/close.png);
+	width: 16px;
+	height: 16px;
+	position: absolute;
+	right: 12px;
+	top: 12px;
+	cursor: pointer;
+}
+
+.geocoding-results-list {
+	background: #DDD;
+	position: absolute;
+	width: 100%;
+	top: 40px;
+	bottom: 0px;
 	overflow-y: scroll;
+	padding: 0px;
+	margin: 0px;
 }
 
 .geocoding-result {
 	list-style: none;
 	padding: 10px;
 	margin: 10px;
+	cursor: pointer;
+	border-radius: 5px;
+	border: 1px solid transparent;
+}
+
+.geocoding-result:hover {
+	border: 1px solid black;
+	background: #AAA;
 }

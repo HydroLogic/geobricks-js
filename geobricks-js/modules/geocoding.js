@@ -1,8 +1,5 @@
-define([ "jquery", "message-bus", "geocoding-engine", "i18n", "css-loader", "module", "require", "alerts", "jquery-ui", "spin", "jquery.spin" ], function($, bus, geocoding, i18n, cssLoader, module, require) {
+define([ "jquery", "message-bus", "geocoding-engine", "i18n", "layout", "module", "alerts", "jquery-ui", "spin", "jquery.spin" ], function($, bus, geocoding, i18n, Layout, module) {
 	var config = module.config();
-
-	var defaultCss = [ "../styles/geocoding.css" ];
-	cssLoader.initModule(config.css, defaultCss.map(require.toUrl));
 
 	// Spin options
 	var spinOpts = config.spinOpts;
@@ -24,95 +21,113 @@ define([ "jquery", "message-bus", "geocoding-engine", "i18n", "css-loader", "mod
 		};
 	}
 
-	function createResult(id, result, div) {
-		var li = $("<li>" + result.address + "</li>");
+	var container = $("#" + Layout.geocoding);
+
+	// Layout
+	var input = $("<input type='text' placeholder='Addresssuche'>");
+	var searching = $("<div/>").spin(spinOpts);
+	var inputDiv = $("<div/>");
+	var resultsDiv = $("<div/>");
+	var resultsTitle = $("<div>Results</div>").attr("id", "geocoding-title");
+	var resultsClose = $("<div/>");
+	var resultsList = $("<ul/>");
+	var icon = $("<div/>");
+
+	inputDiv.append(icon);
+	inputDiv.append(input);
+	inputDiv.append(searching);
+
+	resultsDiv.append(resultsTitle);
+	resultsDiv.append(resultsClose);
+	resultsDiv.append(resultsList);
+
+	resultsDiv.draggable({
+		handle : "#geocoding-title"
+	});
+	resultsDiv.resizable({
+		handles : "n, e, s, w, ne, nw, se, sw"
+	});
+	resultsDiv.find("div.ui-resizable-se").removeClass("ui-icon-gripsmall-diagonal-se");
+	resultsDiv.find("div.ui-resizable-se").removeClass("ui-icon");
+
+	container.append(inputDiv);
+	container.append(resultsDiv);
+
+	// CSS
+	container.addClass("geocoding-container");
+	searching.addClass("geocoding-searching");
+	input.addClass("geocoding-input");
+	inputDiv.addClass("geocoding-input-div");
+	icon.addClass("geocoding-input-icon");
+	resultsDiv.addClass("geocoding-results");
+	resultsTitle.addClass("geocoding-results-title");
+	resultsClose.addClass("geocoding-results-close");
+	resultsList.addClass("geocoding-results-list");
+
+	// Visibility
+	searching.hide();
+	resultsDiv.hide();
+
+	function createResult(result, div) {
+		var li = $("<li/>").text(result.address);
 		li.addClass("geocoding-result");
 		li.click(function() {
 			bus.send("center-map", [ result ]);
-			div.toggle('slow');
+			console.log(resultsDiv);
+			resultsDiv.hide();
 		});
 		return li;
 	}
 
-	return {
-		init : function(id, div) {
-			var container = div.attr("id", "geocoding." + id);
-
-			// Layout
-			var input = $("<input type='text'>");
-			var searching = $("<div/>").spin(spinOpts);
-			var more = $("<div/>");
-			var inputDiv = $("<div/>");
-			var resultsDiv = $("<div/>");
-
-			inputDiv.append(input);
-			inputDiv.append(searching);
-			inputDiv.append(more);
-
-			container.append(inputDiv);
-			container.append(resultsDiv);
-
-			// CSS
-			container.addClass("geocoding-container");
-			searching.addClass("geocoding-searching");
-			more.addClass("geocoding-more");
-			input.addClass("geocoding-input");
-			inputDiv.addClass("geocoding-input-div");
-			resultsDiv.addClass("geocoding-results");
-
-			// Visibility
-			searching.hide();
-			more.hide();
-			resultsDiv.hide();
-
-			// Events
-			function success(r) {
-				var results = $.grep(r, function(value, index) {
-					if (!config.bounds) {
-						return true;
-					}
-
-					var b = config.bounds;
-					return value.left > b.left && value.right < b.right && value.top < b.top && value.bottom > b.bottom;
-				});
-
-				searching.hide();
-				resultsDiv.hide();
-				if (results.length == 0) {
-					bus.send("alert", [ i18n("No results"), "warning" ]);
-				} else {
-					resultsDiv.empty();
-					bus.send("center-map", [ results[0] ]);
-					if (results.length > 1) {
-						more.show();
-						var ul = $("<ul/>").addClass("geocoding-result-list");
-						for (var i = 0; i < results.length; i++) {
-							ul.append(createResult(id, results[i], resultsDiv));
-						}
-						resultsDiv.append(ul);
-
-						ul.scrollTop();
-						resultsDiv.scrollTop();
-					}
-				}
+	// Events
+	function success(r) {
+		var results = $.grep(r, function(value, index) {
+			if (!config.bounds) {
+				return true;
 			}
 
-			function error(message) {
-				searching.hide();
-				bus.send("alert", [ message, "danger" ]);
+			var b = config.bounds;
+			return value.left > b.left && value.right < b.right && value.top < b.top && value.bottom > b.bottom;
+		});
+
+		searching.hide();
+		icon.show();
+		resultsList.empty();
+		resultsDiv.hide();
+		if (results.length == 0) {
+			bus.send("alert", [ i18n("No results"), "warning" ]);
+		} else if (results.length == 1) {
+			bus.send("center-map", [ results[0] ]);
+		} else {
+			for (var i = 0; i < results.length; i++) {
+				resultsList.append(createResult(results[i], resultsDiv));
 			}
 
-			input.keypress(function(e) {
-				if (e.keyCode == 13) {
-					searching.show();
-					more.hide();
-					geocoding.search(input.val(), success, error);
-				}
-			});
-
-			more.click(function() {
-				resultsDiv.toggle('slow');
-			});
+			resultsDiv.show();
+			resultsList.scrollTop(0);
 		}
-	};
+	}
+
+	function error(message) {
+		searching.hide();
+		bus.send("alert", [ message, "danger" ]);
+	}
+
+	function search() {
+		searching.show();
+		icon.hide();
+		geocoding.search(input.val(), success, error);
+	}
+
+	input.keypress(function(e) {
+		if (e.keyCode == 13) {
+			search();
+		}
+	});
+	icon.click(function() {
+		search();
+	});
+	resultsClose.click(function() {
+		resultsDiv.hide();
+	});
 });
