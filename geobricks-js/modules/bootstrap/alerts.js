@@ -19,9 +19,7 @@ define([ "jquery", "message-bus", "css-loader", "module", "layout", "bootstrap" 
 		console.log(msg);
 		console.log(severity);
 
-		var button = $("<button/>").addClass("close");
-		button.attr("data-dismiss", "alert");
-		button.text("&times");
+		var button = $('<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>');
 		var text = $("<div><strong>" + prefixes[severity] + "</strong> " + msg + "</div>");
 		var div = $("<div/>").addClass("alert alert-dismissable alert-" + severity);
 
