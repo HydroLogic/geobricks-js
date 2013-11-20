@@ -12,6 +12,7 @@ define([ "jquery", "leaflet", "message-bus", "leaflet-google", "layout", "module
 	var layers = {};
 	var baseLayer = null;
 	var positionMarkerIcon = L.icon(positionIconProperties);
+	var position = null;
 
 	function getBounds(obj) {
 		var southWest = new L.LatLng(obj.bottom, obj.left);
