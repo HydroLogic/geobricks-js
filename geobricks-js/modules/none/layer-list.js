@@ -1,4 +1,4 @@
-define([ "jquery", "message-bus", "module" ], function($, bus, module) {
+define([ "jquery", "message-bus", "layout", "module" ], function($, bus, Layout, module) {
 	var config = module.config();
 
 	function Group(groupId, groupName, nColumns, container) {
@@ -62,8 +62,9 @@ define([ "jquery", "message-bus", "module" ], function($, bus, module) {
 			var disabled = !$this.icon.data("disabled");
 			$this.icon.data("disabled", disabled);
 			$this.setEnabled(!disabled);
+
 		});
-		this.setEnabled(visible);
+		this.doSetEnabled(visible);
 
 		if (!config.hideText) {
 			var text = $("<div/>").text(layerName);
@@ -72,7 +73,8 @@ define([ "jquery", "message-bus", "module" ], function($, bus, module) {
 		}
 	}
 
-	Layer.prototype.setEnabled = function(enabled) {
+	// This only changes appearance
+	Layer.prototype.doSetEnabled = function(enabled) {
 		if (enabled) {
 			this.div.removeClass("disabled");
 			this.icon.css("background", "url(" + this.layerIcon + ") no-repeat center");
@@ -81,46 +83,45 @@ define([ "jquery", "message-bus", "module" ], function($, bus, module) {
 			this.icon.css("background", "url(" + this.layerIconDisabled + ") no-repeat center");
 		}
 		this.icon.css("background-size", "contain");
+	};
+
+	// This changes appearance and also sends an event
+	Layer.prototype.setEnabled = function(enabled) {
+		this.doSetEnabled(enabled);
 		bus.send("layer-visibility", [ this.id, enabled ]);
 	};
 
-	return {
-		init : function(id, divId) {
-			var container = $("#" + divId);
-			container.addClass("layerlist-container");
+	var container = $("#" + Layout.layerList);
+	container.addClass("layerlist-container");
 
-			var groups = {};
+	var groups = {};
 
-			bus.listen("add-layer-group", function(event, groupInfo) {
-				if (groupInfo.mapId == id) {
-					var group = new Group(groupInfo.id, groupInfo.name, groupInfo.nColumns);
-					groups[groupInfo.id] = group;
+	bus.listen("add-layer-group", function(event, groupInfo) {
+		var group = new Group(groupInfo.id, groupInfo.name, groupInfo.nColumns);
+		groups[groupInfo.id] = group;
 
-					if (config.useGroupTitle) {
-						container.append(group.title);
-					}
-					container.append(group.div);
-				}
-			});
+		if (config.useGroupTitle) {
+			container.append(group.title);
+		}
+		container.append(group.div);
+	});
 
-			bus.listen("add-layer", function(event, layerInfo) {
-				var group = groups[layerInfo.groupId];
-				if (!group) {
-					return;
-				}
+	bus.listen("add-layer", function(event, layerInfo) {
+		var group = groups[layerInfo.groupId];
+		if (!group) {
+			return;
+		}
 
-				var layer = new Layer(layerInfo.id, layerInfo.icon, layerInfo.iconDisabled, layerInfo.name, layerInfo.visible);
-				group.addLayer(layer);
-			});
+		var layer = new Layer(layerInfo.id, layerInfo.icon, layerInfo.iconDisabled, layerInfo.name, layerInfo.visible);
+		group.addLayer(layer);
+	});
 
-			bus.listen("group-visibility", function(event, groupId, visibility) {
-				// Ignore events for hiding groups
-				if (visibility) {
-					$.each(groups, function(id, index) {
-						groups[id].visibility(id == groupId);
-					});
-				}
+	bus.listen("group-visibility", function(event, groupId, visibility) {
+		// Ignore events for hiding groups
+		if (visibility) {
+			$.each(groups, function(id, index) {
+				groups[id].visibility(id == groupId);
 			});
 		}
-	};
+	});
 });
