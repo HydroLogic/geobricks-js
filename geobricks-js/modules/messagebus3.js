@@ -29,7 +29,7 @@ define(function() {
         
         for (var i = 0; i < n; i++) {
             var subscription = subscribers[i];
-            subscription.callback.apply(subscription.context, message);
+            subscription.callback.apply(subscription.context, [message]);
         }
 
         return n;

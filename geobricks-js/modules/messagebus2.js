@@ -26,7 +26,7 @@ define(["jquery"], function($) {
     // Optionally, provide a context for the callback execution (*this*).
     function subscribe(channel, callback, context) {
         $(o).on(channel, function(event, message) {
-            callback.apply(context, message);
+            callback.apply(context, [message]);
         });
     }
     
